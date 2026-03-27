@@ -31,18 +31,17 @@
 
 <script>
 import { CONSUMABLES_MAP } from '@/consumables';
-import { mapActions, mapGetters, mapState } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
     computed: {
-        ...mapState(['selectedBaitId', 'ownedConsumables']),
-        ...mapGetters(['getCurrentGear']),
+        ...mapGetters(['getCurrentGear','getSelectedBaitId','getOwnedConsumables']),
 
         selectedBait() {
-            return CONSUMABLES_MAP[this.selectedBaitId]
+            return CONSUMABLES_MAP[this.getSelectedBaitId]
         },
         consumables() {
-            return this.ownedConsumables
+            return this.getOwnedConsumables
         }
     },
     methods: {

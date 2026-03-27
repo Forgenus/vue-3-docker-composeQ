@@ -3,15 +3,15 @@
         <Boat :direction="lastHorDir" />
 
         <div class="game__hud">
-            |(X:{{ boat.x.toFixed(0) }},Y:{{ boat.y.toFixed(0) }})|TYPE:
-            {{ getCurrentZoneType }}|BALANCE:{{ balance }}
+            |(X:{{ getBoat.x.toFixed(0) }},Y:{{ getBoat.y.toFixed(0) }})|TYPE:
+            {{ getCurrentZoneType }}|BALANCE:{{ getBalance }}
             |CURRENT POWER: {{ getGearPower.toFixed(2) }}|inMarket:{{ isInMarket }}
         </div>
 
         <Shop v-if="isInMarket" />
 
-        <Zone v-for="zone in getNearbyZones" :key="`${zone.x},${zone.y}`" :zone="zone" :boat="boat" variant="fishing" />
-        <Zone v-for="island in getNearbyIslands" :key="`${island.x},${island.y}`" :zone="island" :boat="boat"
+        <Zone v-for="zone in getNearbyZones" :key="`${zone.x},${zone.y}`" :zone="zone" :boat="getBoat" variant="fishing" />
+        <Zone v-for="island in getNearbyIslands" :key="`${island.x},${island.y}`" :zone="island" :boat="getBoat"
             variant="island" />
 
         <FishingMinigame v-if="fishingActive" @catch="(payload) => handleCatch(payload)" :type="getCurrentZoneType" />
@@ -29,7 +29,7 @@ import Boat from './Boat.vue'
 import Zone from './Zone.vue'
 import Shop from './Shop.vue'
 import { getChunkCoords, getZoneType } from '../../fishZones.js'
-import { mapState, mapActions, mapGetters } from 'vuex'
+import {  mapActions, mapGetters } from 'vuex'
 import { GEAR_MAP } from '@/gear'
 import CurrentGear from './CurrentGear.vue'
 
@@ -54,11 +54,11 @@ export default {
     },
 
     computed: {
-        ...mapState(['boat', 'chunks', 'balance', 'ownedGear']),
-        ...mapGetters(['getNearbyZones', 'getCurrentZoneType', 'getNearbyIslands', 'isInMarket', 'getGearPower']),
+        ...mapGetters(['getNearbyZones', 'getCurrentZoneType', 'getNearbyIslands',
+         'isInMarket', 'getGearPower','getBoat','getChunks','getBalance','getOwnedGear']),
 
         chunk() {
-            return getChunkCoords(this.boat.x, this.boat.y)
+            return getChunkCoords(this.getBoat.x, this.getBoat.y)
         }
 
 
@@ -82,7 +82,7 @@ export default {
             else if (event.key === KEY_SPACE && !this.fishingActive && !this.isInMarket) {
                 this.fishingActive = true
             }
-            
+
         },
 
         keyUp(event) {

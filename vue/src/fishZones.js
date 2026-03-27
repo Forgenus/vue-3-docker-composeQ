@@ -13,22 +13,22 @@ export const FishZoneType = {
     HIGH: 'high'
 }
 
-export function getChunkCoords(x, y) {
+export const getChunkCoords = (x, y) => {
     return {
         cx: Math.floor(x / CHUNK_SIZE),
         cy: Math.floor(y / CHUNK_SIZE)
     }
 }
-export function generateZone(x,y){
+export const generateZone = (x, y) => {
     return {
-            x,
-            y,
-            radius: MIN_R + Math.random() * MAX_R,
-            type: FishZoneType.MEDIUM,
-            upgraded: 0
-        }
+        x,
+        y,
+        radius: MIN_R + Math.random() * MAX_R,
+        type: FishZoneType.MEDIUM,
+        upgraded: 0
+    }
 }
-export function generateZonesForChunk(cx, cy) {
+export const generateZonesForChunk = (cx, cy) => {
     const seed = getSeed(cx, cy)
     const rand = prng(seed)
 
@@ -48,7 +48,7 @@ export function generateZonesForChunk(cx, cy) {
     }
     return zones
 }
-export function generateIslandsForChunk(cx, cy) {
+export const generateIslandsForChunk = (cx, cy) => {
     const seed = getSeed(cx, cy) + 1000
     const rand = prng(seed)
 
@@ -63,7 +63,7 @@ export function generateIslandsForChunk(cx, cy) {
     return islands
 }
 
-export function getZoneType(x, y, nearbyZones) {
+export const getZoneType = (x, y, nearbyZones) => {
     for (const zone of nearbyZones) {
         const dx = x - zone.x
         const dy = y - zone.y
@@ -76,7 +76,7 @@ export function getZoneType(x, y, nearbyZones) {
     return FishZoneType.LOW
 }
 
-export function isInsideIsland(x, y, islands) {
+export const isInsideIsland = (x, y, islands) => {
     for (const island of islands) {
         const dx = x - island.x
         const dy = y - island.y
@@ -85,7 +85,7 @@ export function isInsideIsland(x, y, islands) {
     }
     return false
 }
-export function isInMarket(x, y, islands) {
+export const isInMarket = (x, y, islands) => {
     for (const island of islands) {
         const dx = x - island.x
         const dy = y - island.y
@@ -94,14 +94,14 @@ export function isInMarket(x, y, islands) {
     }
     return false
 }
-export function findClosestZone(x, y, nearbyZones) {
-    let best = {dist: Infinity}
+export const findClosestZone = (x, y, nearbyZones) => {
+    let best = { dist: Infinity }
     for (const zone of nearbyZones) {
         const dx = x - zone.x
         const dy = y - zone.y
         const dist = Math.sqrt(dx * dx + dy * dy)
         if (dist <= best.dist) {
-            best = {dist: dist, zone: zone}
+            best = { dist: dist, zone: zone }
         }
     }
     return best

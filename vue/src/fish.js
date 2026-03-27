@@ -30,7 +30,7 @@ export const FISH_LIST = [
 const TOTAL_WEIGHT = FISH_LIST.reduce((sum, fish) => sum + fish.weight, 0)
 
 
-export function getRandomFish() {
+export const getRandomFish = () => {
   let roll = Math.random() * TOTAL_WEIGHT
   for (const fish of FISH_LIST) {
     if (roll < fish.weight) return fish
@@ -39,16 +39,16 @@ export function getRandomFish() {
   return FISH_LIST[FISH_LIST.length - 1]
 }
 
-export function getFishByBait(baitId) {
+export const getFishByBait = (baitId) => {
   const bait = CONSUMABLES_MAP[baitId]
   const catchable = FISH_LIST.filter((fish) => bait.effect.catchableFish.includes(fish.name))
   const weight = catchable.reduce((sum, fish) => sum + fish.weight, 0)
-  
+
   let roll = Math.random() * weight
   for (const fish of catchable) {
     if (roll < fish.weight) return fish
     roll -= fish.weight
   }
-  return catchable[catchable - 1]
+  return catchable[catchable.length - 1]
 
 }

@@ -9,7 +9,7 @@
 
 <script>
 import { getFishByBait } from '@/fish'
-import { mapActions, mapGetters, mapState } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 const SPEED = 0.5
 const INDICATOR_STEP_MS = 10
 const BASE_CATCH_GAP = 10
@@ -37,8 +37,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['selectedBaitId']),
-    ...mapGetters(['getFishingPower']),
+    ...mapGetters(['getFishingPower','getSelectedBaitId']),
 
     effectiveGap() {
       if (!this.fish) return
@@ -61,8 +60,8 @@ export default {
     if (this.type === 'medium') waitTime = WAIT_MEDIUM
     else if (this.type === 'high') waitTime = WAIT_HIGH
     waitTime /= Math.sqrt(this.getFishingPower)
-    
-    this.fish = getFishByBait(this.selectedBaitId)
+
+    this.fish = getFishByBait(this.getSelectedBaitId)
 
     setTimeout(() => {
       this.readyToCatch = true
@@ -117,7 +116,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-
 .minigame {
   position: absolute;
   left: 10px;

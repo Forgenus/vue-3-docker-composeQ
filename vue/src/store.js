@@ -151,7 +151,27 @@ export default createStore({
     getFishingPower(state, getters) {
       return getters.getBaitBoost * getters.getGearPower
     },
-
+    getSelectedBaitId(state){
+      return state.selectedBaitId
+    },
+    getOwnedConsumables(state){
+      return state.ownedConsumables
+    },
+    getOwnedFish(state){
+      return state.ownedFish
+    },
+    getBoat(state){
+      return state.boat
+    },
+    getChunks(state){
+      return state.chunks
+    },
+    getBalance(state){
+      return state.balance
+    },
+    getOwnedGear(state){
+      return state.ownedGear
+    }
   },
 
   mutations: {
