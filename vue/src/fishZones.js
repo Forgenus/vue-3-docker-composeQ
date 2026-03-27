@@ -107,8 +107,8 @@ export const findClosestZone = (x, y, nearbyZones) => {
     return best
 }
 
-function prng(seed) {
-    return function () {
+const prng = (seed) => {
+    return  () =>{
         let t = seed += 0x6D2B79F5
         t = Math.imul(t ^ t >>> 15, t | 1)
         t ^= t + Math.imul(t ^ t >>> 7, t | 61)
@@ -116,6 +116,6 @@ function prng(seed) {
     }
 }
 
-function getSeed(cx, cy) {
+const getSeed = (cx, cy) => {
     return cx * 73856093 ^ cy * 19349663
 }

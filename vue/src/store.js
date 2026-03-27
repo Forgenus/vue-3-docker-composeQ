@@ -28,11 +28,11 @@ const CHUNK_ACTIVE_RADIUS = 2
 const FEED_USE_RANGE = 100
 
 
-function saveToLS(state) {
+ saveToLS = (state) => {
   localStorage.setItem(LS_KEY, JSON.stringify(state))
 }
 
-function loadFromLS() {
+ loadFromLS = ()=> {
   const data = localStorage.getItem(LS_KEY)
   return data
     ? JSON.parse(data)
