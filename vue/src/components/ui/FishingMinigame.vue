@@ -1,18 +1,18 @@
 <template>
   <div class="minigame">
     <div class="minigame__bar-container">
-      <div class="minigame__catch-zone"></div>
+      <div class="minigame__catch-zone" :style="catchZoneStyle"></div>
       <div class="minigame__indicator" :style="{ top: indicatorPos + '%' }"></div>
     </div>
   </div>
 </template>
 
 <script>
-import { getRandomFish } from '@/fish'
-import { mapActions } from 'vuex'
+import { getFishByBait } from '@/fish'
+import { mapActions, mapGetters } from 'vuex'
 const SPEED = 0.5
 const INDICATOR_STEP_MS = 10
-const CATCH_ZONE = [40, 60]
+const BASE_CATCH_GAP = 10
 const WAIT_LOW = 3000
 const WAIT_MEDIUM = 500
 const WAIT_HIGH = 0
@@ -28,6 +28,7 @@ export default {
   },
   data() {
     return {
+      fish: null,
       indicatorPos: 0,
       direction: 1,
       timer: null,
@@ -35,10 +36,32 @@ export default {
       readyToCatch: false
     }
   },
+  computed: {
+    ...mapGetters(['getFishingPower','getSelectedBaitId']),
+
+    effectiveGap() {
+      if (!this.fish) return
+
+      return BASE_CATCH_GAP * Math.sqrt(this.getFishingPower / this.fish.mass)
+    },
+
+    catchZoneStyle() {
+      const top = 50 - this.effectiveGap
+      const height = this.effectiveGap * 2
+      return {
+        top: `${top}%`,
+        height: `${height}%`
+      }
+    }
+  },
+
   mounted() {
     let waitTime = WAIT_LOW
     if (this.type === 'medium') waitTime = WAIT_MEDIUM
     else if (this.type === 'high') waitTime = WAIT_HIGH
+    waitTime /= Math.sqrt(this.getFishingPower)
+
+    this.fish = getFishByBait(this.getSelectedBaitId)
 
     setTimeout(() => {
       this.readyToCatch = true
@@ -47,9 +70,8 @@ export default {
     this.timer = setInterval(this.moveIndicator, INDICATOR_STEP_MS)
     window.addEventListener('keydown', this.onSpace)
   },
-  methods: {
-    ...mapActions(['addFish']),
 
+  methods: {
     moveIndicator() {
       if (!this.readyToCatch)
         return
@@ -63,22 +85,29 @@ export default {
         this.direction = 1
       }
     },
+
     onSpace(event) {
-      if (event.key !== KEY_SPACE) return
+      if (event.key !== KEY_SPACE)
+        return
       this.tryCatch()
     },
+
     tryCatch() {
-      if (!this.readyToCatch || this.caught) return
+      if (!this.readyToCatch || this.caught)
+        return
       this.caught = true
-      const [min, max] = CATCH_ZONE
+
+      const min = 50 - this.effectiveGap
+      const max = 50 + this.effectiveGap
       const success = this.indicatorPos >= min && this.indicatorPos <= max
-      if (success) {
-        const caughtFish = getRandomFish()
-        this.addFish(caughtFish)
+      if (!success) {
+        this.fish = null
       }
-      this.$emit('catch', success)
+      console.log(`IN EMIT ${success}`)
+      this.$emit('catch', { success, fish: this.fish })
     }
   },
+
   beforeUnmount() {
     clearInterval(this.timer)
     window.removeEventListener('keydown', this.onSpace)
