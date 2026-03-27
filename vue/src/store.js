@@ -28,11 +28,11 @@ const CHUNK_ACTIVE_RADIUS = 2
 const FEED_USE_RANGE = 100
 
 
- saveToLS = (state) => {
+const saveToLS = (state) => {
   localStorage.setItem(LS_KEY, JSON.stringify(state))
 }
 
- loadFromLS = ()=> {
+const loadFromLS = () => {
   const data = localStorage.getItem(LS_KEY)
   return data
     ? JSON.parse(data)
@@ -151,25 +151,25 @@ export default createStore({
     getFishingPower(state, getters) {
       return getters.getBaitBoost * getters.getGearPower
     },
-    getSelectedBaitId(state){
+    getSelectedBaitId(state) {
       return state.selectedBaitId
     },
-    getOwnedConsumables(state){
+    getOwnedConsumables(state) {
       return state.ownedConsumables
     },
-    getOwnedFish(state){
+    getOwnedFish(state) {
       return state.ownedFish
     },
-    getBoat(state){
+    getBoat(state) {
       return state.boat
     },
-    getChunks(state){
+    getChunks(state) {
       return state.chunks
     },
-    getBalance(state){
+    getBalance(state) {
       return state.balance
     },
-    getOwnedGear(state){
+    getOwnedGear(state) {
       return state.ownedGear
     }
   },
